@@ -20,36 +20,49 @@ import org.apache.mahout.cf.taste.recommender.UserBasedRecommender;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
+
 public class App {
 
 	public static void main(String[] args) {
+		
+		ContentBasedRecommendation contentBasedObj = new ContentBasedRecommendation();
+		
 		try {
-			DataModel model = new FileDataModel(new File("src/main/java/dataset2_cleaned.csv"));
+			DataModel model = new FileDataModel(new File("src/main/java/dataset1_cleaned_average_division.csv"));
 
 			
-			UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
+			/*UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
 
 			// Step 3:- Create UserNeighbourHood object. (No Need to
 	        // create ItemNeighbourHood object while creating
 	        // Item based Recommendation)
-			UserNeighborhood neighborhood = new ThresholdUserNeighborhood(1, similarity, model);
+			UserNeighborhood neighborhood = new ThresholdUserNeighborhood(0.1, similarity, model);
 
 			// Step 4:- Create object of UserBasedRecommender or
 	        // ItemBasedRecommender
 			UserBasedRecommender recommender = new GenericUserBasedRecommender(model, neighborhood, similarity);
 			List<RecommendedItem> recommend = recommender.recommend(0, 5);
-			System.out.println(recommend);
+			System.out.println(recommend);*/
 			
 			
-//			ItemSimilarity similarity = new PearsonCorrelationSimilarity(model);
-//
-//			
-//			ItemBasedRecommender recommender = new GenericItemBasedRecommender(model, similarity);
-//			List<RecommendedItem> recommendations = recommender.recommend(272, 3);
-//			
-//			for (RecommendedItem recommendedItem : recommendations) {
-//				System.out.println(recommendedItem);
-//			}
+			ItemSimilarity similarity = new PearsonCorrelationSimilarity(model);
+
+			
+			ItemBasedRecommender recommender = new GenericItemBasedRecommender(model, similarity);
+			List<RecommendedItem> recommendations = recommender.recommend(272, 3);
+			
+			int[] resultID = new int[3];
+			int i = 0;
+			for (RecommendedItem recommendedItem : recommendations) {
+				System.out.println(recommendedItem.getItemID());
+				resultID[i] = (int) recommendedItem.getItemID();
+				i++;
+			}
+			long[] recoMovieID = contentBasedObj.RecommendMoviesBasedOnContent(272, resultID, 2);
+			
+			for(int j =0; j<recoMovieID.length; j++){
+				System.out.println(recoMovieID[j]);
+			}
 
 //			RecommenderBuilder builder = new RecommenderBuilder() {
 //				public Recommender buildRecommender(DataModel model) throws TasteException {
