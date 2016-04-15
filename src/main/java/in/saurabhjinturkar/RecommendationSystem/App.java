@@ -39,5 +39,15 @@ public class App {
 		} catch (TasteException e1) {
 			e1.printStackTrace();
 		}
+		
+		try {
+			content = new ContentBasedCollaborativeFiltering();
+			System.out.println(content.recommend(616, 3));
+			//content.evaluate();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (TasteException e1) {
+			e1.printStackTrace();
+		}
 	}
 }
