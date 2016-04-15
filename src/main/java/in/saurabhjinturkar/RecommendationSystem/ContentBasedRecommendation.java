@@ -26,7 +26,7 @@ public class ContentBasedRecommendation {
 		long[] recommendedMovies = new long[howMany];
 		long[] mostSimilarUserIDs = null;
 		
-		String csvFile = "F://SJSU//Erinaki 239//Dataset1.csv";
+		String csvFile = "src/main/java/Dataset1_With_UserRatings.csv";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
@@ -90,7 +90,7 @@ public class ContentBasedRecommendation {
 			CopyPreviousDataToNewCSVFile();
 			InputUserDataToNewCSVFile(user);
 
-			DataModel dm = new FileDataModel(new File("/F:/SJSU/Erinaki 239/dataset3_cleaned.csv"));
+			DataModel dm = new FileDataModel(new File("src/main/java/dataset3_cleaned.csv"));
 
 			UserSimilarity similarity = new UncenteredCosineSimilarity(dm);
 
@@ -120,8 +120,8 @@ public class ContentBasedRecommendation {
 	
 	public void CopyPreviousDataToNewCSVFile() throws IOException {
 
-		FileWriter dataset3 = new FileWriter("/F:/SJSU/Erinaki 239/dataset3_cleaned.csv", false);
-		FileReader dataset2 = new FileReader("/F:/SJSU/Erinaki 239/dataset2_cleaned.csv");
+		FileWriter dataset3 = new FileWriter("src/main/java/dataset3_cleaned.csv", false);
+		FileReader dataset2 = new FileReader("src/main/java/dataset2_cleaned.csv");
 
 		try {
 			int count = dataset2.read();
@@ -138,7 +138,7 @@ public class ContentBasedRecommendation {
 
 	public void InputUserDataToNewCSVFile(UserProfile user) throws IOException {
 
-		FileWriter dataset3 = new FileWriter("/F:/SJSU/Erinaki 239/dataset3_cleaned.csv", true);
+		FileWriter dataset3 = new FileWriter("src/main/java/dataset3_cleaned.csv", true);
 		CSVPrinter csvFilePrinter = null;
 
 		try {
@@ -164,7 +164,7 @@ public class ContentBasedRecommendation {
 			user.userPreference[j] = 0;
 		}
 
-		String csvFile = "F://SJSU//Erinaki 239//Dataset2.csv";
+		String csvFile = "src/main/java/Dataset2.csv";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
