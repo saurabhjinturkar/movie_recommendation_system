@@ -10,7 +10,7 @@ import org.apache.mahout.cf.taste.eval.RecommenderEvaluator;
 import org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator;
 import org.apache.mahout.cf.taste.impl.eval.RMSRecommenderEvaluator;
 import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
-import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
+import org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.recommender.ItemBasedRecommender;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
@@ -38,9 +38,20 @@ public class ItemBasedCollaborativeFiltering extends AbstractRecommender {
 		return output;
 	}
 
+	public List<Integer> recommendMovieIds(int userId, int count) throws TasteException {
+		List<Integer> output = new ArrayList<Integer>();
+
+		List<RecommendedItem> recommend = recommender.recommend(userId, count);
+		for (RecommendedItem item : recommend) {
+			System.out.println(item);
+			output.add((int) item.getItemID());
+		}
+		return output;
+	}
+	
 	@Override
 	public void buildModel() throws TasteException {
-		ItemSimilarity similarity = new PearsonCorrelationSimilarity(model);
+		ItemSimilarity similarity = new UncenteredCosineSimilarity(model);
 		recommender = new GenericItemBasedRecommender(model, similarity);
 	}
 
@@ -49,6 +60,8 @@ public class ItemBasedCollaborativeFiltering extends AbstractRecommender {
 
 		RecommenderBuilder builder = new RecommenderBuilder() {
 			public Recommender buildRecommender(DataModel model) throws TasteException {
+				ItemSimilarity similarity = new UncenteredCosineSimilarity(model);
+				ItemBasedRecommender recommender = new GenericItemBasedRecommender(model, similarity);
 				return recommender;
 			}
 		};

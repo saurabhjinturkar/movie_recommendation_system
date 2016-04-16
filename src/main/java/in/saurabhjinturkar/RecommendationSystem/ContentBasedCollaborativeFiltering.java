@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.csv.CSVPrinter;
@@ -31,17 +30,17 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 
 	@Override
 	public List<String> recommend(int userId, int count) throws TasteException {
-		
+
 		List<String> output = new ArrayList<String>();
 		long[] mostSimilarUserIDs = null;
-		
+
 		String csvFile = "src/main/java/Dataset1_With_UserRatings.csv";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
 		String rating[] = new String[20];
 		int id = userId;
-		
+
 		try {
 
 			br = new BufferedReader(new FileReader(csvFile));
@@ -52,10 +51,6 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 					break;
 				}
 			}
-			/*System.out.println(rating.length);
-			for(int i=0;i<rating.length;i++){
-				System.out.println(rating[i]);
-			}*/
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -69,17 +64,17 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 				}
 			}
 		}
-		
-		UserProfile user = CalculateUserVector(id, rating);
-		
+
+		UserProfile user = calculateUserVector(id, rating);
+
 		for (int j = 0; j < user.userPreference.length; j++) {
 			System.out.print(user.userPreference[j] + " ");
 		}
 
 		try {
 
-			CopyPreviousDataToNewCSVFile();
-			InputUserDataToNewCSVFile(user);
+			copyPreviousDataToNewCSVFile();
+			inputUserDataToNewCSVFile(user);
 
 			DataModel dm = new FileDataModel(new File("src/main/java/dataset3_cleaned.csv"));
 
@@ -90,34 +85,31 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 			UserBasedRecommender recommender = new GenericUserBasedRecommender(dm, neighborhood, similarity);
 
 			mostSimilarUserIDs = recommender.mostSimilarUserIDs(id, count);
-			for(long itemId: mostSimilarUserIDs){
+			for (long itemId : mostSimilarUserIDs) {
 				System.out.println(itemId);
 				System.out.println(util.getMovieName((int) itemId));
 				output.add(util.getMovieName((int) itemId));
 			}
-			//System.out.println(Arrays.toString(mostSimilarUserIDs));
-
 		} catch (Exception e) {
 			System.out.println("There was an error.");
 			e.printStackTrace();
 		}
-		
-		
+
 		return output;
 	}
-	
-	public List<String> hybridRecommend(int userId,int[] movieID, int count) throws TasteException {
-		
+
+	public List<String> hybridRecommend(int userId, List<Integer> movieID, int count) throws TasteException {
+
 		List<String> output = new ArrayList<String>();
 		long[] mostSimilarUserIDs = null;
-		
+
 		String csvFile = "src/main/java/Dataset1_With_UserRatings.csv";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
 		String rating[] = new String[20];
 		int id = userId;
-		
+
 		try {
 
 			br = new BufferedReader(new FileReader(csvFile));
@@ -129,21 +121,17 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 				}
 			}
 			boolean present = false;
-			for(int i=1 ;i <rating.length; i++){
+			for (int i = 1; i < rating.length; i++) {
 				present = false;
-				for(int j=0; j<movieID.length; j++){
-					if(i == movieID[j]){
+				for (int j = 0; j < movieID.size(); j++) {
+					if (i == movieID.get(j)) {
 						present = true;
 					}
 				}
-				if(!present){
+				if (!present) {
 					rating[i] = "0";
 				}
 			}
-			/*System.out.println(rating.length);
-			for(int i=0;i<rating.length;i++){
-				System.out.println(rating[i]);
-			}*/
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -157,17 +145,19 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 				}
 			}
 		}
-		
-		UserProfile user = CalculateUserVector(id, rating);
-		
+
+		UserProfile user = calculateUserVector(id, rating);
+
+		System.out.println("User profile is :");
 		for (int j = 0; j < user.userPreference.length; j++) {
-			System.out.print(user.userPreference[j] + " ");
+			System.out.print(user.userPreference[j] + "\t");
 		}
+		System.out.println();
 
 		try {
 
-			CopyPreviousDataToNewCSVFile();
-			InputUserDataToNewCSVFile(user);
+			copyPreviousDataToNewCSVFile();
+			inputUserDataToNewCSVFile(user);
 
 			DataModel dm = new FileDataModel(new File("src/main/java/dataset3_cleaned.csv"));
 
@@ -178,19 +168,16 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 			UserBasedRecommender recommender = new GenericUserBasedRecommender(dm, neighborhood, similarity);
 
 			mostSimilarUserIDs = recommender.mostSimilarUserIDs(id, count);
-			for(long itemId: mostSimilarUserIDs){
+			for (long itemId : mostSimilarUserIDs) {
 				System.out.println(itemId);
 				System.out.println(util.getMovieName((int) itemId));
 				output.add(util.getMovieName((int) itemId));
 			}
-			//System.out.println(Arrays.toString(mostSimilarUserIDs));
-
 		} catch (Exception e) {
 			System.out.println("There was an error.");
 			e.printStackTrace();
 		}
-		
-		
+
 		return output;
 	}
 
@@ -203,8 +190,8 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 	public void evaluate() throws TasteException {
 		System.out.println("Not implemented..");
 	}
-	
-	public void CopyPreviousDataToNewCSVFile() throws IOException {
+
+	public void copyPreviousDataToNewCSVFile() throws IOException {
 
 		FileWriter dataset3 = new FileWriter("src/main/java/dataset3_cleaned.csv", false);
 		FileReader dataset2 = new FileReader("src/main/java/dataset2_cleaned.csv");
@@ -222,7 +209,7 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 		}
 	}
 
-	public void InputUserDataToNewCSVFile(UserProfile user) throws IOException {
+	public void inputUserDataToNewCSVFile(UserProfile user) throws IOException {
 
 		FileWriter dataset3 = new FileWriter("src/main/java/dataset3_cleaned.csv", true);
 		CSVPrinter csvFilePrinter = null;
@@ -241,8 +228,8 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 			System.out.println(e);
 		}
 	}
-	
-	public UserProfile CalculateUserVector(int id, String[] rating) {
+
+	public UserProfile calculateUserVector(int id, String[] rating) {
 		UserProfile user = new UserProfile(id);
 		int moviesRated = 0;
 
@@ -267,7 +254,7 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 				if (i != 0 && i < rating.length) {
 					for (int j = 1; j < user.userPreference.length; j++) {
 						user.userPreference[j] = user.userPreference[j]
-								+ (Integer.parseInt(movieGenre[j].trim()) * Integer.parseInt(rating[i].trim()));
+						    + (Integer.parseInt(movieGenre[j].trim()) * Integer.parseInt(rating[i].trim()));
 					}
 				}
 				i++;
@@ -293,18 +280,16 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 		}
 		for (int j = 1; j < user.userPreference.length; j++) {
 			user.userPreference[j] = user.userPreference[j] / moviesRated;
-			// System.out.println(user.userPreference[j]);
 		}
 		float sum = 0;
-		for(int i =1; i<user.userPreference.length; i++){
+		for (int i = 1; i < user.userPreference.length; i++) {
 			sum = sum + user.userPreference[i];
 		}
-		float avg = sum/(user.userPreference.length -1);
+		float avg = sum / (user.userPreference.length - 1);
 		for (int j = 1; j < user.userPreference.length; j++) {
-			if(user.userPreference[j]>avg || user.userPreference[j] == avg){
+			if (user.userPreference[j] > avg || user.userPreference[j] == avg) {
 				user.userPreference[j] = 1;
-			}
-			else{
+			} else {
 				user.userPreference[j] = 0;
 			}
 		}
