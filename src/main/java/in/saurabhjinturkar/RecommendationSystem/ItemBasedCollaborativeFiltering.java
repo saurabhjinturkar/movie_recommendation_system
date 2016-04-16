@@ -68,9 +68,9 @@ public class ItemBasedCollaborativeFiltering extends AbstractRecommender {
 
 		RecommenderEvaluator evaluator = new AverageAbsoluteDifferenceRecommenderEvaluator();
 		RecommenderEvaluator evaluator2 = new RMSRecommenderEvaluator();
-		System.out.println("Average Absolute Difference Score:");
+		System.out.println("\nAverage Absolute Difference Score:");
 		System.out.print(evaluator.evaluate(builder, null, model, 0.9, 1.0));
-		System.out.println("RMS Score:");
+		System.out.println("\nRMS Score:");
 		System.out.print(evaluator2.evaluate(builder, null, model, 0.9, 1.0));
 
 	}

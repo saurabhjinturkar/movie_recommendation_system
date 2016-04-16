@@ -28,7 +28,6 @@ public class Util {
 			String lastName = record[0];
 			movies.add(lastName);
 		}
-		System.out.println(movies.size() + " movies loaded in util...");
 	}
 
 	public String getMovieName(int index) {

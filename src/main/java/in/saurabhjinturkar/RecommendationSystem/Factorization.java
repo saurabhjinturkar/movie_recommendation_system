@@ -65,7 +65,6 @@ public class Factorization {
 		System.out.println("Mean Squared Error = " + MSE);
 
 		// Save and load model
-//		model.save(jsc.sc(), "src/main/java/dataset1_spark_output.csv");
 		System.out.println(model.predict(616, 0));
 	}
 }

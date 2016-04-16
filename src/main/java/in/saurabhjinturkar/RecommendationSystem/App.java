@@ -32,7 +32,9 @@ public class App {
 
 		try {
 			user = new UserBasedCollaborativeFiltering();
+			System.out.println("***User based collaborative filtering recommendations:");
 			System.out.println(user.recommend(userId, 3));
+			System.out.println("\n***Evaluation of user based collaborative filtering recommender***");
 			user.evaluate();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -42,7 +44,9 @@ public class App {
 
 		try {
 			item = new ItemBasedCollaborativeFiltering();
+			System.out.println("***Item based collaborative filtering recommendations:");
 			System.out.println(item.recommend(userId, 3));
+			System.out.println("\n***Evaluation of item based collaborative filtering recommender***");
 			item.evaluate();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -52,9 +56,9 @@ public class App {
 		
 		try {
 			content = new ContentBasedCollaborativeFiltering();
-			System.out.println("Content Based Recommendation of movies based on genre for User Id: " + userId);
+			System.out.println("***Content Based Recommendation of movies based on genre for User Id: " + userId);
 			System.out.println(content.recommend(userId, 3));
-			System.out.println("Hybrid Recommendation");
+			System.out.println("\n\n***Hybrid recommendations:");
 			System.out.println(content.hybridRecommend(userId, item.recommendMovieIds(userId, 10) , 3));
 		} catch (IOException e1) {
 			e1.printStackTrace();
