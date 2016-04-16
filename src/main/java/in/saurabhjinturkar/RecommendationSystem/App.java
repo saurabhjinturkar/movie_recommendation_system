@@ -52,6 +52,7 @@ public class App {
 		
 		try {
 			content = new ContentBasedCollaborativeFiltering();
+			System.out.println("Content Based Recommendation of movies based on genre for User Id: " + userId);
 			System.out.println(content.recommend(userId, 3));
 			System.out.println("Hybrid Recommendation");
 			System.out.println(content.hybridRecommend(userId, item.recommendMovieIds(userId, 10) , 3));

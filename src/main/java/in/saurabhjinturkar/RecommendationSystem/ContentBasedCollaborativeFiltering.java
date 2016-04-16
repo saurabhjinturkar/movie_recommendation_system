@@ -66,7 +66,7 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 		}
 
 		UserProfile user = calculateUserVector(id, rating);
-
+		System.out.println("Generated profile of the User Id:" + id);
 		for (int j = 0; j < user.userPreference.length; j++) {
 			System.out.print(user.userPreference[j] + " ");
 		}
@@ -86,8 +86,7 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 
 			mostSimilarUserIDs = recommender.mostSimilarUserIDs(id, count);
 			for (long itemId : mostSimilarUserIDs) {
-				System.out.println(itemId);
-				System.out.println(util.getMovieName((int) itemId));
+				//System.out.println(util.getMovieName((int) itemId));
 				output.add(util.getMovieName((int) itemId));
 			}
 		} catch (Exception e) {
@@ -148,7 +147,7 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 
 		UserProfile user = calculateUserVector(id, rating);
 
-		System.out.println("User profile is :");
+		System.out.println("Generated profile of the User Id:" + id);
 		for (int j = 0; j < user.userPreference.length; j++) {
 			System.out.print(user.userPreference[j] + "\t");
 		}
@@ -169,8 +168,7 @@ public class ContentBasedCollaborativeFiltering extends AbstractRecommender {
 
 			mostSimilarUserIDs = recommender.mostSimilarUserIDs(id, count);
 			for (long itemId : mostSimilarUserIDs) {
-				System.out.println(itemId);
-				System.out.println(util.getMovieName((int) itemId));
+				//System.out.println(util.getMovieName((int) itemId));
 				output.add(util.getMovieName((int) itemId));
 			}
 		} catch (Exception e) {
